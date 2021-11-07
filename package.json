@@ -4,7 +4,7 @@
   "description": "Build an App with Node.js, Express, and TypeScript",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon app.ts"
+    "start": "nodemon app.ts"
   },
   "license": "MIT",
   "devDependencies": {
