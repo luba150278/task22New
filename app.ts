@@ -1,6 +1,7 @@
 import express from "express";
 import fetch from "cross-fetch";
 import config from "./utils/config";
+import { SourceMap } from "module";
 
 const app = express(); //express init
 const PORT = config.PORT; //used port
@@ -155,9 +156,9 @@ function getGenderSyncVariant(url: string) {
 }
 /**
  * Task#5 - create callback function, which use ip as parameter and apply in async function
- * @param ip 
- * @param callBackFun 
- * @returns 
+ * @param ip
+ * @param callBackFun
+ * @returns
  */
 async function useCallBackFun(
   ip: string,
@@ -167,13 +168,36 @@ async function useCallBackFun(
 }
 /**
  * CallBack function for useCallBackFun
- * @param ip 
- * @returns 
+ * @param ip
+ * @returns
  */
 function callBackFun(ip: string): string {
   return ip;
 }
 
+// async function fn1(callback: Function): Promise<String> {
+//   let res = await getDataFromApi(config.URL_FOR_IP);
+//   const data = await res.json();
+//   console.log(callback(data.ip));
+//   return callback(data.ip);
+// }
+
+// async function fn2(callback: (id: string) => void): Promise<String> {
+//   return await fn1(callback);
+// }
+async function firstFuncInTask6(url: string): Promise<String> {
+  let res = await getDataFromApi(url);
+  let data = await res.json();
+  return data.ip;
+}
+async function cbForTask6(id: Promise<String>): Promise<String> {
+  return await id;
+}
+async function secondFuncInTask6(
+  callback: (initialText: Promise<String>) => void
+) {
+  return callback(firstFuncInTask6(config.URL_FOR_IP));
+}
 
 /**
  * main method for start app
@@ -189,16 +213,19 @@ const start = async () => {
     console.log(`Task#2: ${ip}`);
 
     //----Task3---------------
-    res = await fetch(config.URL_FOR_NAME);
+
     usePromiceAll(config.URL_FOR_NAME);
     unUsePromiceAll(config.URL_FOR_NAME);
     useClearPromise(config.URL_FOR_NAME);
     //-----------Task4----------
-    res = await fetch(config.URL_FOR_GENDER);
+
     getGenderAsyncVariant(config.URL_FOR_GENDER);
     getGenderSyncVariant(config.URL_FOR_GENDER);
     //-----------Task5------------
     console.log(`Task#5: ${await useCallBackFun(ip, callBackFun)}`);
+    //fn2(callBackFun);
+    let task6 = await secondFuncInTask6(cbForTask6);
+    console.log(`Task#6: ${task6}`);
     //---------start server------------
     app.listen(PORT, () => {
       //console.log(`server started on port ${PORT}`);
