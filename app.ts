@@ -174,25 +174,33 @@ async function useCallBackFun(
 function callBackFun(ip: string): string {
   return ip;
 }
-
-// async function fn1(callback: Function): Promise<String> {
-//   let res = await getDataFromApi(config.URL_FOR_IP);
-//   const data = await res.json();
-//   console.log(callback(data.ip));
-//   return callback(data.ip);
-// }
-
-// async function fn2(callback: (id: string) => void): Promise<String> {
-//   return await fn1(callback);
-// }
+//=============================TASK6========
+// 1. Create a first function that returns the user id. This function should be the async function.
+// 2. Create a second function that uses the first function. The second function contains just one parameter. This parameter is a callback function with the first param as user id.
+// 4. The second function starts when callback got user id.
+/**
+ *
+ * @param url
+ * @returns
+ */
 async function firstFuncInTask6(url: string): Promise<String> {
   let res = await getDataFromApi(url);
   let data = await res.json();
   return data.ip;
 }
+/**
+ * Callback to function 2
+ * @param id
+ * @returns
+ */
 async function cbForTask6(id: Promise<String>): Promise<String> {
   return await id;
 }
+/**
+ *
+ * @param callback
+ * @returns
+ */
 async function secondFuncInTask6(
   callback: (initialText: Promise<String>) => void
 ) {
@@ -223,7 +231,7 @@ const start = async () => {
     getGenderSyncVariant(config.URL_FOR_GENDER);
     //-----------Task5------------
     console.log(`Task#5: ${await useCallBackFun(ip, callBackFun)}`);
-    //fn2(callBackFun);
+    //----------Task6--------------
     let task6 = await secondFuncInTask6(cbForTask6);
     console.log(`Task#6: ${task6}`);
     //---------start server------------
